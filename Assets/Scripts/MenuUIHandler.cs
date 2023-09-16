@@ -10,18 +10,44 @@ using UnityEngine.UI;
 
 public class MenuUIHandler : MonoBehaviour
 {
+    public static MenuUIHandler Instance;
+
     [SerializeField] private Button startButton;
     [SerializeField] private TMPro.TMP_InputField playerNameInput;
-  
+    private string playerName;
+
+
+    private void Awake()
+    {
+        // Ensure there's only one instance of MenuUIHandler
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
-        startButton.interactable = false;
-        playerNameInput.onValueChanged.AddListener(ShowStartButton);
+        PreStartButton();
     }
 
     void Update()
     {
+        playerName = playerNameInput.text;
+    }
 
+    public string PlayerName 
+    {
+        get { return playerName; }
+        set { playerName = value;}
+    }
+    private void PreStartButton()
+    {
+        startButton.interactable = false;
+        playerNameInput.onValueChanged.AddListener(ShowStartButton);
     }
 
     //Method that shows start button if player enter name
